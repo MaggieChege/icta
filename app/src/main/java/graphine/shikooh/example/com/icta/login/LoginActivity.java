@@ -79,6 +79,8 @@ public class LoginActivity extends AppCompatActivity implements
     String countryCode ="+254";
     Button getStarted;
     ProgressDialog mProgressDialog;
+    //Hold phone number
+    String mePhone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +109,7 @@ public class LoginActivity extends AppCompatActivity implements
                     public void onSelectCountry(String name, String code, String dialCode, int flagDrawableResID) {
                         // Implement your code here
                         mLoginCountryCode.setText(" " + dialCode);
-                        countryCode = "+254";
+                        countryCode = dialCode;
 
                         picker.dismiss();
 
@@ -175,6 +177,7 @@ public class LoginActivity extends AppCompatActivity implements
                 // for instance if the the phone number format is not valid.
                 hideProgressDialog();
                 Log.w(TAG, "onVerificationFailed", e);
+                //Log.w(TAG, "onVerificationFailed", phoneNumber);
                 // [START_EXCLUDE silent]
                 mVerificationInProgress = false;
                 // [END_EXCLUDE]
@@ -226,7 +229,8 @@ public class LoginActivity extends AppCompatActivity implements
 
         // [START_EXCLUDE]
         if (mVerificationInProgress && validatePhoneNumber()) {
-            startPhoneNumberVerification(mPhoneNumberField.getText().toString());
+            //startPhoneNumberVerification(countryCode+ mPhoneNumberField.getText().toString());
+            startPhoneNumberVerification(mePhone);
         }
         // [END_EXCLUDE]
     }
@@ -396,12 +400,14 @@ public class LoginActivity extends AppCompatActivity implements
         }
     }
     private boolean validatePhoneNumber() {
-        String phoneNumber = countryCode + mPhoneNumberField.getText().toString();
+        mePhone = countryCode + mPhoneNumberField.getText().toString();
         //String phoneNumber = "+254710836007";
-        if (TextUtils.isEmpty(phoneNumber)) {
+        Log.w(TAG, "validatePhoneNumber:" + mePhone);
+        if (TextUtils.isEmpty(mePhone)) {
             mPhoneNumberField.setError("Invalid phone number.");
             return false;
         }
+        mPhoneNumberField.setText(mePhone);
 
         return true;
     }
